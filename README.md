@@ -94,4 +94,44 @@ We also exclude all input tracks with `WHERE track_id NOT IN (SELECT track_id FR
 
 ## API Reference
 
-tbd
+Note: `double` means `double precision`, `precision` is omitted for readability.
+
+###### `ct_add(a double[], b double[])`
+
+Returns a new vector which is the sum of vector `a` and vector `b`.
+
+###### `ct_sub(a double[], b double[])`
+
+Returns a new vector which is the result of subtracting vector `b` from vector `a`.
+
+###### `ct_random_normal(dim INTEGER, mean double, std double)`
+
+Returns a new vector of size `dim` filled with random numbers picked from a gaussian normal distribution with a standard deviation of `std` centered around `mean`.
+
+###### `ct_norm(vector double[])`
+
+Calculates and returns the magnitude of `vector`.
+
+###### `ct_scale(vec double[], c double)`
+
+Scales (/multiplies all values of the) vector `vec` with constant factor `c`.
+
+###### `ct_dot(a double[], b double[])`
+
+Returns a new vector which represents the dot product of vector `a` and vector `b`.
+
+###### `ct_weigh(...)`
+
+Returns a set of `(vector, norm)`, where `vector` is the sum of the weight vectors as supplied and scaled by the following parameters, and `norm` is that vector's magnitude.
+
+Param | Purpose
+--- | ---
+`positive double[][]` | An array of vectors to add to the weighted vector
+`negative double precision[][] DEFAULT ARRAY[]::double precision[][]` | (optional) An array of vectors to subtract from the weighted vector
+`noise double precision DEFAULT NULL` | (optional) Amount of noise to add to the weighted vector (as a constant factor which scales a random vector with a standard deviation of the magnitude of the weighted vector)
+`pos_scale double precision DEFAULT NULL` | (optional) A constant factor to scale all `positive` vectors by before adding them to the weighted vector
+`neg_scale double precision DEFAULT NULL` | (optional) A constant factor to scale all `negative` vectors by before adding them to the weighted vector
+
+###### `ct_similarity(a double[], b double[], norm_a double DEFAULT NULL, norm_b double DEFAULT NULL)`
+
+Returns a value indicating the cosine proximity of vector `b` to vector `a`, in sort-order. Return values start at `-1.0` (most similar). More positive values are less similar. If the magnitudes of the vectors (`norm_a` and `norm_b`) are not supplied to this function, they're calculated on the fly, which should be avoided if possible.
