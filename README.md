@@ -59,18 +59,18 @@ WITH
     SELECT *
     FROM ct_weigh(
       positive := ARRAY(SELECT vec FROM liked)
-      ,negative := ARRAY(SELECT vec FROM dont_like)
-      ,neg_scale := 0.1
-      ,noise := 0.05
+     ,negative := ARRAY(SELECT vec FROM dont_like)
+     ,neg_scale := 0.1
+     ,noise := 0.05
     )
   )
 SELECT
   tp.track_id,
   ct_similarity(
     a := (select w.vec from weighted w)
-    ,b := tp.vec
-    ,norm_a := (select w.norm from weighted w)
-    ,norm_b := tp.magnitude
+   ,b := tp.vec
+   ,norm_a := (select w.norm from weighted w)
+   ,norm_b := tp.magnitude
   )
 FROM track_properties tp
 WHERE track_id NOT IN (SELECT track_id FROM liked)
